@@ -6,33 +6,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-<style>
-h1{
-    text-align: center;
-}
-.title{
-    margin: 0 auto;
-}
-.cards{
-    display: flex;
-    flex-wrap: wrap;
-}
-.card{
-    width: 30%;
-    margin: 5px;
-    background-color: rgb(6, 143, 97);
-    color: white;
-    padding: 20px 5px;
-}
-</style>
+    <style>
+        body{
+            background-color: bisque;
+            color:  rgb(128, 55, 55);
+        }
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .title {
+            margin: 0 auto;
+        }
+
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 30%;
+            margin: 5px;
+            border-width: 5px;
+            border-radius: 50px;
+            border-color: rgb(128, 55, 55);
+            background-color: white;
+            border-style:solid;
+            padding: 20px 5px;
+        }
+
+        .card_r {
+            width: 50%;
+        }
+
+        .card_content {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        img {
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body>
     <div class="title">
-        <h1>台灣各地今日氣溫</h1> 
-    </div>   
+        <h1>台灣各地今日氣溫</h1>
+    </div>
     <div class="cards">
-               
+        <img src="" alt="">
+
     </div>
     <!-- jquery cnd -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -43,17 +71,45 @@ h1{
             cache: false,
             success: function (res) {
                 console.log(res)
-                
-                
+
+
                 res.records.location.forEach(location => {
-                    var cards=document.querySelector('.cards')
-                    cards.innerHTML += 
-                    `<div class="card">
-                    <h2>${location.locationName}</h2>
-                    <p>最低溫:${location.weatherElement[2].time[0].parameter.parameterName}<sup>o</sup>C</p>
-                    <p>最高溫:${location.weatherElement[4].time[0].parameter.parameterName}<sup>o</sup>C</p>
+                    var cards = document.querySelector('.cards')
+                    var Wx = location.weatherElement[0].time[0].parameter.parameterName;
+                    var Pop = location.weatherElement[1].time[0].parameter.parameterName;
+
+                    if (Wx == '晴時多雲') {
+                        img_src = './suncloud.png';
+                    }
+
+                    if (Wx == '陰短暫雨') { 
+                        img_src = './rain.png';
+                    }
+                   
+                    if (Wx == '多雲') { 
+                        img_src = './clouds.png';
+                    }
+                    if (Wx == '陰天') { 
+                        img_src = './nosun.png';
+                    }
+                    console.log(Pop)
+
+                    cards.innerHTML +=
+                `<div class="card">
+                        <h2>${location.locationName}</h2>
+                        <div class="card_content">
+                            <div class="card_l">
+                            <p>降雨率: ${Pop}%</p>
+                            <p>最低溫:${location.weatherElement[2].time[0].parameter.parameterName}<sup>o</sup>C</p>
+                            <p>最高溫:${location.weatherElement[4].time[0].parameter.parameterName}<sup>o</sup>C</p>
+                            <p>${Wx}</p>
+                        </div>
+                        <div class="card_r">
+                            <img src="${img_src}" alt="">
+                        </div>
+                        </div>
                     </div>`;
-                });
+        });
             }
         });
     </script>
